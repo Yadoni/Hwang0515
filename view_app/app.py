@@ -63,7 +63,7 @@ with col1:
         position: fixed;
         bottom: 10px;
         left: 10px;
-        width: 90px;
+        width: 80px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
