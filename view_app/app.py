@@ -61,10 +61,10 @@ with col1:
     legend_html = """
     <div style="
         position: fixed;
-        bottom: 10px;
+        bottom: 5px;
         left: 30px;
         width: 100px;
-        height: 80px;
+        height: 75px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
@@ -78,7 +78,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=500)
+    st_folium(m, width=700, height=550)
 
 # === 차트 & 워드클라우드 ===
 with col2:
@@ -89,11 +89,11 @@ with col2:
             font_path=font_path if os.path.exists(font_path) else None,
             background_color="white",
             width=400,
-            height=250,
+            height=275,
             colormap="Set1"
         ).generate(text)
 
-        fig, ax = plt.subplots(figsize=(4, 2.5))
+        fig, ax = plt.subplots(figsize=(4, 2.75))
         ax.imshow(wc, interpolation="bilinear")
         ax.axis("off")
         st.pyplot(fig)
@@ -105,7 +105,7 @@ with col2:
     colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
     bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
 
-    fig, ax = plt.subplots(figsize=(4, 2.2))
+    fig, ax = plt.subplots(figsize=(4, 2))
     ax.bar(level_counts.index, level_counts.values, color=bar_colors)
     ax.set_ylabel("메시지 수")
     ax.set_yticks(range(1, max(level_counts.values)+1))
