@@ -1,0 +1,8 @@
+streamlit
+pandas
+gspread
+oauth2client
+streamlit-folium
+streamlit-javascript
+matplotlib
+wordcloud
