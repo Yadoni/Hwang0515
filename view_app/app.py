@@ -45,7 +45,7 @@ with col1:
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
-        popup_text = f"<div style='font-size: 15px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 18px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
@@ -58,14 +58,14 @@ with col1:
         position: fixed;
         bottom: 50px;
         left: 50px;
-        width: 150px;
+        width: 110px;
         height: 110px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
         font-size:14px;
         padding: 10px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0);
+        box-shadow: 2px 2px 2px rgba(0,0,0,0);
     ">
    
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
