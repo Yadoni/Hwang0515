@@ -19,6 +19,11 @@ sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet
 
 # === UI 초기화 ===
 st.set_page_config(page_title="메시지 시각화", layout="wide")
+st.markdown("""
+    <style>
+    .block-container {padding-top: 2rem; padding-bottom: 0.5rem;}
+    </style>
+""", unsafe_allow_html=True)
 st.title("🗺️ 실시간 메시지 시각화 대시보드")
 
 # === 데이터 로딩 ===
@@ -33,12 +38,7 @@ if os.path.exists(font_path):
 else:
     st.warning("한글 폰트 파일 NanumGothic.ttf 이 누락되었습니다. 워드클라우드가 깨질 수 있습니다.")
 
-# === 레이아웃 구성 (여백 조정)
-st.markdown("""
-<style>
-.block-container {padding-top: 0.5rem; padding-bottom: 0.5rem;}
-</style>
-""", unsafe_allow_html=True)
+# === 레이아웃 구성 ===
 col1, col2 = st.columns([2.3, 1.2])
 
 # === 지도 시각화 ===
@@ -61,15 +61,15 @@ with col1:
     legend_html = """
     <div style="
         position: fixed;
-        bottom: 5px;
+        bottom: 20px;
         left: 30px;
-        width: 100px;
+        width: 90px;
         height: 75px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
         font-size:12px;
-        padding: 6px;
+        padding: 4px;
         box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     ">
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
@@ -78,7 +78,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=550)
+    st_folium(m, width=700, height=500)
 
 # === 차트 & 워드클라우드 ===
 with col2:
