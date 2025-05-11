@@ -50,7 +50,7 @@ with col1:
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
-        popup_text = f"<div style='font-size: 12px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 15px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
@@ -60,7 +60,7 @@ with col1:
     # === 레전드 삽입 (Element 방식)
     legend_html = """
     <div style="
-        position: absolute;
+        position: fixed;
         bottom: 10px;
         left: 10px;
         width: 80px;
@@ -69,7 +69,7 @@ with col1:
         z-index:9999;
         font-size:11px;
         padding: 4px;
-        box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        box-shadow: 1px 1px 2px rgba(0,0,0,0);
     ">
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
