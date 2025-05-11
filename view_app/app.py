@@ -63,12 +63,12 @@ with col1:
         position: fixed;
         bottom: 10px;
         left: 10px;
-        width: 80px;
+        width: 100px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
-        font-size:11px;
-        padding: 4px;
+        font-size:13px;
+        padding: 5px;
         box-shadow: 1px 1px 2px rgba(0,0,0,0);
     ">
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
