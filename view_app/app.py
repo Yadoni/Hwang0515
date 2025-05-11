@@ -5,7 +5,6 @@ import folium
 from streamlit_folium import st_folium
 from oauth2client.service_account import ServiceAccountCredentials
 from wordcloud import WordCloud
-from branca.element import Template, MacroElement
 import matplotlib.pyplot as plt
 
 # === 인증 설정 ===
@@ -34,30 +33,36 @@ with col1:
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
-        color = "blue" if row["level"] == "재학생" else ("green" if row["level"] == "휴학생" else "red")
+        color = "blue" if row["level"] == "재학생" else (
+                "green" if row["level"] == "휴학생" else "red")
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=f"{row['name']} ({row['level']}): {row['message']}",
             icon=folium.Icon(color=color)
         ).add_to(m)
 
-    # 레전드 추가
+    # === 레전드 삽입 (Element 방식)
     legend_html = """
-    {% macro html() %}
-    <div style="position: fixed; bottom: 50px; left: 50px; width: 150px;
-                height: 110px; background-color: white; border:2px solid grey;
-                z-index:9999; font-size:14px; padding: 10px;
-                box-shadow: 2px 2px 5px rgba(0,0,0,0.3);">
+    <div style="
+        position: fixed;
+        bottom: 50px;
+        left: 50px;
+        width: 150px;
+        height: 110px;
+        background-color: white;
+        border:2px solid grey;
+        z-index:9999;
+        font-size:14px;
+        padding: 10px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    ">
     <b>🟢 level 안내</b><br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="green"/></svg> 휴학생
     </div>
-    {% endmacro %}
     """
-    legend = MacroElement()
-    legend._template = Template(legend_html)
-    m.get_root().add_child(legend)
+    m.get_root().html.add_child(folium.Element(legend_html))
     st_folium(m, width=700, height=500)
 
 # === 차트 & 워드클라우드 ===
