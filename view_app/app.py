@@ -61,11 +61,11 @@ with col1:
         width: 150px;
         height: 110px;
         background-color: white;
-        border:2px solid grey;
+        border:1px solid grey;
         z-index:9999;
         font-size:14px;
         padding: 10px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        box-shadow: 2px 2px 5px rgba(0,0,0,0);
     ">
    
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
@@ -74,21 +74,10 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=600)
+    st_folium(m, width=400, height=400)
 
 # === 차트 & 워드클라우드 ===
 with col2:
-    st.markdown("#### 📊 신분별 메시지 수")
-    level_counts = df["level"].value_counts()
-    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
-    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
-
-    fig, ax = plt.subplots()
-    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
-    ax.set_ylabel("메시지 수")
-    ax.set_title("신분별 메시지 수")
-    st.pyplot(fig)
-
     st.markdown("#### ☁️ 메시지 워드클라우드")
     if not df["message"].empty:
         text = " ".join(df["message"].astype(str))
@@ -106,3 +95,16 @@ with col2:
         st.pyplot(fig)
     else:
         st.info("메시지가 아직 없습니다.")
+
+    
+    st.markdown("#### 📊 신분별 메시지 수")
+    level_counts = df["level"].value_counts()
+    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
+    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
+
+    fig, ax = plt.subplots()
+    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
+    ax.set_ylabel("메시지 수")
+    ax.set_title("신분별 메시지 수")
+    st.pyplot(fig)
+
