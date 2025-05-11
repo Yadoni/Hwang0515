@@ -1,11 +1,12 @@
-# 메시지 전용 입력 앱 (app_input.py)
-
 import streamlit as st
-from streamlit_javascript import st_javascript
 import gspread
-import random
-from datetime import datetime
+import pandas as pd
+import folium
+from streamlit_folium import st_folium
 from oauth2client.service_account import ServiceAccountCredentials
+from wordcloud import WordCloud
+from branca.element import Template, MacroElement
+import matplotlib.pyplot as plt
 
 # === 인증 설정 ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -16,41 +17,67 @@ client = gspread.authorize(creds)
 sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet1
 
 # === UI 초기화 ===
-st.set_page_config(page_title="메시지 입력", layout="centered")
-st.title("📨 황승식 교수님께 감사 메시지 남기기")
+st.set_page_config(page_title="메시지 시각화", layout="wide")
+st.title("🗺️ 실시간 메시지 시각화 대시보드")
 
-# === 위치 수집 시도 ===
-st.info("📍 브라우저 위치 권한을 요청합니다. 허용하지 않아도 메시지 저장은 가능합니다.")
-coords = st_javascript("navigator.geolocation.getCurrentPosition((pos) => pos.coords);")
+# === 데이터 로딩 ===
+records = sheet.get_all_records()
+df = pd.DataFrame(records)
 
-# === 위치 처리 ===
-if isinstance(coords, dict) and coords.get("latitude") is not None:
-    lat = coords["latitude"]
-    lon = coords["longitude"]
-    st.success(f"📌 위치 확인됨: {lat:.4f}, {lon:.4f}")
-else:
-    sea_areas = {
-        "남해": {"lat": (33.0, 34.5), "lon": (126.0, 129.5)},
-        "동해": {"lat": (36.0, 38.5), "lon": (129.5, 131.5)},
-        "서해": {"lat": (34.5, 37.5), "lon": (124.5, 126.5)}
-    }
-    selected_sea = random.choice(list(sea_areas.keys()))
-    sea = sea_areas[selected_sea]
-    lat = round(random.uniform(*sea["lat"]), 6)
-    lon = round(random.uniform(*sea["lon"]), 6)
-    st.warning(f"🌊 위치 정보를 사용할 수 없습니다. {selected_sea} 바다 위 무작위 좌표가 사용됩니다: {lat}, {lon}")
+# === 레이아웃 구성 ===
+col1, col2 = st.columns([2, 1])
 
-# === 메시지 입력 폼 ===
-with st.form("message_form"):
-    name = st.text_input("이름 (익명 가능)", "")
-    level = st.selectbox("level", ["재학생", "졸업생", "휴학생"])
-    message = st.text_area("메시지를 작성해 주세요 (100자 이내)", max_chars=100)
-    submit = st.form_submit_button("메시지 보내기")
+# === 지도 시각화 ===
+with col1:
+    st.markdown("#### 📍 메시지 위치 지도")
+    map_center = [df["lat"].mean(), df["lon"].mean()]
+    m = folium.Map(location=map_center, zoom_start=6)
 
-if submit:
-    if message.strip() == "":
-        st.warning("메시지를 입력해 주세요.")
+    for _, row in df.iterrows():
+        color = "blue" if row["level"] == "재학생" else ("green" if row["level"] == "휴학생" else "red")
+        folium.Marker(
+            location=[row["lat"], row["lon"]],
+            popup=f"{row['name']} ({row['level']}): {row['message']}",
+            icon=folium.Icon(color=color)
+        ).add_to(m)
+
+    # 레전드 추가
+    legend_html = """
+    {% macro html() %}
+    <div style="position: fixed; bottom: 50px; left: 50px; width: 150px;
+                height: 110px; background-color: white; border:2px solid grey;
+                z-index:9999; font-size:14px; padding: 10px;
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.3);">
+    <b>🟢 level 안내</b><br>
+    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
+    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
+    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="green"/></svg> 휴학생
+    </div>
+    {% endmacro %}
+    """
+    legend = MacroElement()
+    legend._template = Template(legend_html)
+    m.get_root().add_child(legend)
+    st_folium(m, width=700, height=500)
+
+# === 차트 & 워드클라우드 ===
+with col2:
+    st.markdown("#### 📊 신분별 메시지 수")
+    st.bar_chart(df["level"].value_counts())
+
+    st.markdown("#### ☁️ 메시지 워드클라우드")
+    if not df["message"].empty:
+        text = " ".join(df["message"].astype(str))
+        wc = WordCloud(
+            font_path="NanumGothic.ttf",
+            background_color="white",
+            width=400,
+            height=250
+        ).generate(text)
+
+        fig, ax = plt.subplots(figsize=(4, 2.5))
+        ax.imshow(wc, interpolation="bilinear")
+        ax.axis("off")
+        st.pyplot(fig)
     else:
-        row = [datetime.now().strftime("%Y-%m-%d"), name if name else "익명", level, message, lat, lon]
-        sheet.append_row(row)
-        st.success("메시지가 구글 시트에 저장되었습니다. 감사합니다 💐")
+        st.info("메시지가 아직 없습니다.")
