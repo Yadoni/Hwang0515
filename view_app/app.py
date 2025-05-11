@@ -33,19 +33,20 @@ if os.path.exists(font_path):
 else:
     st.warning("한글 폰트 파일 NanumGothic.ttf 이 누락되었습니다. 워드클라우드가 깨질 수 있습니다.")
 
-# === 레이아웃 구성 ===
-col1, col2 = st.columns([2, 1])
+# === 레이아웃 구성 (여백 조정)
+st.markdown("<style>.block-container {padding-top: 1rem; padding-bottom: 1rem;}</style>", unsafe_allow_html=True)
+col1, col2 = st.columns([2.3, 1.2])
 
 # === 지도 시각화 ===
 with col1:
-    st.markdown("#### 📍 메시지 위치 지도")
+    st.markdown("#### 📍 메시지 지도")
     map_center = [df["lat"].mean(), df["lon"].mean()]
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
-        popup_text = f"<div style='font-size: 18px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 12px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
@@ -56,47 +57,27 @@ with col1:
     legend_html = """
     <div style="
         position: fixed;
-        bottom: 50px;
-        left: 50px;
-        width: 110px;
-        height: 110px;
+        bottom: 40px;
+        left: 30px;
+        width: 100px;
+        height: 85px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
-        font-size:14px;
-        padding: 10px;
-        box-shadow: 2px 2px 2px rgba(0,0,0,0);
+        font-size:12px;
+        padding: 6px;
+        box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     ">
-   
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="green"/></svg> 휴학생
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=400, height=400)
+    st_folium(m, width=800, height=600)
 
 # === 차트 & 워드클라우드 ===
 with col2:
-    st.markdown("#### ☁️ 메시지 워드클라우드")
-    if not df["message"].empty:
-        text = " ".join(df["message"].astype(str))
-        wc = WordCloud(
-            font_path=font_path if os.path.exists(font_path) else None,
-            background_color="white",
-            width=400,
-            height=300,
-            colormap="Set1"
-        ).generate(text)
-
-        fig, ax = plt.subplots(figsize=(4, 2.5))
-        ax.imshow(wc, interpolation="bilinear")
-        ax.axis("off")
-        st.pyplot(fig)
-    else:
-        st.info("메시지가 아직 없습니다.")
-
-    
     st.markdown("#### 📊 신분별 메시지 수")
     level_counts = df["level"].value_counts()
     colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
@@ -108,3 +89,20 @@ with col2:
     ax.set_title("신분별 메시지 수")
     st.pyplot(fig)
 
+    st.markdown("#### ☁️ 메시지 워드클라우드")
+    if not df["message"].empty:
+        text = " ".join(df["message"].astype(str))
+        wc = WordCloud(
+            font_path=font_path if os.path.exists(font_path) else None,
+            background_color="white",
+            width=400,
+            height=250,
+            colormap="Set1"
+        ).generate(text)
+
+        fig, ax = plt.subplots(figsize=(4, 2.5))
+        ax.imshow(wc, interpolation="bilinear")
+        ax.axis("off")
+        st.pyplot(fig)
+    else:
+        st.info("메시지가 아직 없습니다.")
