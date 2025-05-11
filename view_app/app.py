@@ -68,7 +68,15 @@ with col1:
 # === 차트 & 워드클라우드 ===
 with col2:
     st.markdown("#### 📊 신분별 메시지 수")
-    st.bar_chart(df["level"].value_counts())
+    level_counts = df["level"].value_counts()
+    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
+    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
+
+    fig, ax = plt.subplots()
+    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
+    ax.set_ylabel("메시지 수")
+    ax.set_title("신분별 메시지 수")
+    st.pyplot(fig)
 
     st.markdown("#### ☁️ 메시지 워드클라우드")
     if not df["message"].empty:
@@ -77,7 +85,8 @@ with col2:
             font_path="NanumGothic.ttf",
             background_color="white",
             width=400,
-            height=250
+            height=250,
+            colormap="Set1"  # 색상 추가
         ).generate(text)
 
         fig, ax = plt.subplots(figsize=(4, 2.5))
