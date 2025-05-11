@@ -67,7 +67,7 @@ with col1:
         padding: 10px;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     ">
-    <b>🟢 level 안내</b><br>
+   
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="green"/></svg> 휴학생
