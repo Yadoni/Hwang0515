@@ -47,19 +47,20 @@ with st.form("message_form"):
     message = st.text_area("메시지를 작성해 주세요 (100자 이내)", max_chars=100)
     submitted = st.form_submit_button("메시지 보내기")
 
-if submitted:
+if submit:
     if message.strip() == "":
         st.warning("메시지를 입력해 주세요.")
     else:
         row = [datetime.now().strftime("%Y-%m-%d"), name if name else "익명", level, message, lat, lon]
         sheet.append_row(row)
-        st.success("메시지가 전송되었습니다. 감사합니다 💐")
+        st.success("메시지가 구글 시트에 저장되었습니다. 감사합니다 💐")
 
 # === 결과 보기 버튼 ===
 st.markdown("---")
 st.markdown("👉 메시지 결과가 궁금하다면 아래 버튼을 눌러주세요.")
 if st.button("📊 결과 보기 바로가기"):
     st.markdown(
-        \"\"\"\n        <meta http-equiv=\"refresh\" content=\"0; url='https://hwang0515-view.streamlit.app'\" />\n        \"\"\", unsafe_allow_html=True
+        '<meta http-equiv="refresh" content="0; url=\'https://hwang0515-view.streamlit.app\'" />',
+        unsafe_allow_html=True
     )
 
