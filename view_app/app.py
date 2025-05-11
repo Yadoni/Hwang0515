@@ -21,10 +21,10 @@ sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet
 st.set_page_config(page_title="메시지 시각화", layout="wide")
 st.markdown("""
     <style>
-    .block-container {padding-top: 2rem; padding-bottom: 0.5rem;}
+    .block-container {padding-top: 2rem; padding-bottom: 0rem;}
     </style>
 """, unsafe_allow_html=True)
-st.title("🗺️ 메시지 시각화 대시보드")
+st.title("🗺️ 실시간 메시지 시각화 대시보드")
 
 # === 데이터 로딩 ===
 records = sheet.get_all_records()
@@ -39,7 +39,7 @@ else:
     st.warning("한글 폰트 파일 NanumGothic.ttf 이 누락되었습니다. 워드클라우드가 깨질 수 있습니다.")
 
 # === 레이아웃 구성 ===
-col1, col2 = st.columns([2.3, 1.2])
+col1, col2 = st.columns([2.3, 1.2], gap="small")
 
 # === 지도 시각화 ===
 with col1:
@@ -60,11 +60,10 @@ with col1:
     # === 레전드 삽입 (Element 방식)
     legend_html = """
     <div style="
-        position: fixed;
-        bottom: 20px;
-        left: 30px;
+        position: absolute;
+        bottom: 5px;
+        left: 10px;
         width: 90px;
-        height: 75px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
@@ -78,7 +77,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=500)
+    st_folium(m, width=700, height=480)
 
 # === 차트 & 워드클라우드 ===
 with col2:
@@ -105,7 +104,7 @@ with col2:
     colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
     bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
 
-    fig, ax = plt.subplots(figsize=(4, 1.75))
+    fig, ax = plt.subplots(figsize=(4, 2))
     ax.bar(level_counts.index, level_counts.values, color=bar_colors)
     ax.set_ylabel("메시지 수")
     ax.set_yticks(range(1, max(level_counts.values)+1))
