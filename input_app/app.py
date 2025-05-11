@@ -47,6 +47,12 @@ with st.form("message_form"):
     message = st.text_area("메시지를 작성해 주세요 (100자 이내)", max_chars=100)
     submit = st.form_submit_button("메시지 보내기")
 
+st.markdown(" ")
+if st.button("📊 결과 보기 바로가기"):
+    st.markdown("""
+        <meta http-equiv="refresh" content="0; url='https://hwang0515-view.streamlit.app'" />
+    """, unsafe_allow_html=True)
+
 if submit:
     if message.strip() == "":
         st.warning("메시지를 입력해 주세요.")
@@ -54,3 +60,5 @@ if submit:
         row = [datetime.now().strftime("%Y-%m-%d"), name if name else "익명", level, message, lat, lon]
         sheet.append_row(row)
         st.success("메시지가 구글 시트에 저장되었습니다. 감사합니다 💐")
+
+
