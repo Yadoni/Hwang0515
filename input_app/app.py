@@ -54,7 +54,7 @@ if submit:
     else:
         row = [datetime.now().strftime("%Y-%m-%d"), name if name else "익명", level, message, lat, lon]
         sheet.append_row(row)
-        st.success("메시지가 구글 시트에 저장되었습니다. 감사합니다 💐")
+        st.success("메시지가 전송되었습니다. 감사합니다 💐")
 
 
 # === 결과 보기 버튼 ===
