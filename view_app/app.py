@@ -77,7 +77,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=500)
+    st_folium(m, width=750, height=500)
 
 # === 차트 & 워드클라우드 ===
 with col2:
