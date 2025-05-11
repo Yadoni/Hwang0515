@@ -39,7 +39,7 @@ col1, col2 = st.columns([2.3, 1.2])
 
 # === 지도 시각화 ===
 with col1:
-    st.markdown("#### 📍 메시지 지도")
+    st.markdown("#### 📍 메시지 위치 지도")
     map_center = [df["lat"].mean(), df["lon"].mean()]
     m = folium.Map(location=map_center, zoom_start=6)
 
@@ -78,17 +78,6 @@ with col1:
 
 # === 차트 & 워드클라우드 ===
 with col2:
-    st.markdown("#### 📊 신분별 메시지 수")
-    level_counts = df["level"].value_counts()
-    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
-    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
-
-    fig, ax = plt.subplots()
-    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
-    ax.set_ylabel("메시지 수")
-    ax.set_title("신분별 메시지 수")
-    st.pyplot(fig)
-
     st.markdown("#### ☁️ 메시지 워드클라우드")
     if not df["message"].empty:
         text = " ".join(df["message"].astype(str))
@@ -106,3 +95,15 @@ with col2:
         st.pyplot(fig)
     else:
         st.info("메시지가 아직 없습니다.")
+
+    st.markdown("#### 📊 신분별 메시지 수")
+    level_counts = df["level"].value_counts()
+    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
+    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
+
+    fig, ax = plt.subplots(figsize=(4, 2.2))
+    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
+    ax.set_ylabel("메시지 수")
+    ax.set_yticks(range(1, max(level_counts.values)+1))
+    ax.set_title("신분별 메시지 수")
+    st.pyplot(fig)
