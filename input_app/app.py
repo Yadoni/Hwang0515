@@ -57,12 +57,8 @@ if submit:
         st.success("메시지가 구글 시트에 저장되었습니다. 감사합니다 💐")
 
 
-# === 결과 보기 버튼 (submit 이후 정의됨) ===
+# === 결과 보기 버튼 ===
 st.markdown("---")
-st.markdown("👉 메시지 결과가 궁금하다면 아래 버튼을 눌러주세요.")
-if st.button("📊 결과 보기 바로가기"):
-    st.markdown(
-        '<meta http-equiv="refresh" content="0; url=\'https://hwang0515-view.streamlit.app\'" />',
-        unsafe_allow_html=True
-    )
+st.markdown("👉 메시지 결과가 궁글하다면 아래 버튼을 누르세요.")
+st.link_button("📊 결과 보기", url="https://hwang0515-view.streamlit.app")
 
