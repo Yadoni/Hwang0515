@@ -6,6 +6,7 @@ from streamlit_folium import st_folium
 from oauth2client.service_account import ServiceAccountCredentials
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
 # === 인증 설정 ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -23,6 +24,11 @@ st.title("🗺️ 실시간 메시지 시각화 대시보드")
 records = sheet.get_all_records()
 df = pd.DataFrame(records)
 
+# === 한글 폰트 설정 (matplotlib + wordcloud)
+font_path = "NanumGothic.ttf"
+fm.fontManager.addfont(font_path)
+plt.rc("font", family="NanumGothic")
+
 # === 레이아웃 구성 ===
 col1, col2 = st.columns([2, 1])
 
@@ -35,9 +41,10 @@ with col1:
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
+        popup_text = f"<div style='font-size: 12px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
-            popup=f"{row['name']} ({row['level']}): {row['message']}",
+            popup=folium.Popup(popup_text, max_width=250),
             icon=folium.Icon(color=color)
         ).add_to(m)
 
@@ -82,11 +89,11 @@ with col2:
     if not df["message"].empty:
         text = " ".join(df["message"].astype(str))
         wc = WordCloud(
-            font_path="NanumGothic.ttf",
+            font_path=font_path,
             background_color="white",
             width=400,
             height=250,
-            colormap="Set1"  # 색상 추가
+            colormap="Set1"
         ).generate(text)
 
         fig, ax = plt.subplots(figsize=(4, 2.5))
