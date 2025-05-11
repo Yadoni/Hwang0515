@@ -34,7 +34,11 @@ else:
     st.warning("한글 폰트 파일 NanumGothic.ttf 이 누락되었습니다. 워드클라우드가 깨질 수 있습니다.")
 
 # === 레이아웃 구성 (여백 조정)
-st.markdown("<style>.block-container {padding-top: 1rem; padding-bottom: 1rem;}</style>", unsafe_allow_html=True)
+st.markdown("""
+<style>
+.block-container {padding-top: 0.5rem; padding-bottom: 0.5rem;}
+</style>
+""", unsafe_allow_html=True)
 col1, col2 = st.columns([2.3, 1.2])
 
 # === 지도 시각화 ===
@@ -57,10 +61,10 @@ with col1:
     legend_html = """
     <div style="
         position: fixed;
-        bottom: 40px;
+        bottom: 10px;
         left: 30px;
         width: 100px;
-        height: 85px;
+        height: 80px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
@@ -74,7 +78,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=800, height=600)
+    st_folium(m, width=700, height=500)
 
 # === 차트 & 워드클라우드 ===
 with col2:
