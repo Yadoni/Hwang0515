@@ -45,7 +45,7 @@ with col1:
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
-        popup_text = f"<div style='font-size: 12px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 15px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
@@ -74,7 +74,7 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=700, height=500)
+    st_folium(m, width=700, height=600)
 
 # === 차트 & 워드클라우드 ===
 with col2:
@@ -96,7 +96,7 @@ with col2:
             font_path=font_path if os.path.exists(font_path) else None,
             background_color="white",
             width=400,
-            height=250,
+            height=300,
             colormap="Set1"
         ).generate(text)
 
