@@ -7,6 +7,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import os
 
 # === 인증 설정 ===
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -25,9 +26,12 @@ records = sheet.get_all_records()
 df = pd.DataFrame(records)
 
 # === 한글 폰트 설정 (matplotlib + wordcloud)
-font_path = "NanumGothic.ttf"
-fm.fontManager.addfont(font_path)
-plt.rc("font", family="NanumGothic")
+font_path = os.path.join(os.path.dirname(__file__), "NanumGothic.ttf")
+if os.path.exists(font_path):
+    fm.fontManager.addfont(font_path)
+    plt.rc("font", family="NanumGothic")
+else:
+    st.warning("한글 폰트 파일 NanumGothic.ttf 이 누락되었습니다. 워드클라우드가 깨질 수 있습니다.")
 
 # === 레이아웃 구성 ===
 col1, col2 = st.columns([2, 1])
@@ -89,7 +93,7 @@ with col2:
     if not df["message"].empty:
         text = " ".join(df["message"].astype(str))
         wc = WordCloud(
-            font_path=font_path,
+            font_path=font_path if os.path.exists(font_path) else None,
             background_color="white",
             width=400,
             height=250,
