@@ -46,8 +46,11 @@ col1, col2 = st.columns([2.3, 1.2], gap="small")
 
 # === 지도 시각화 ===
 with col1:
-    st.markdown("#### 📍 메시지 지도")
-    map_center = [37.5665, 126.9780]
+    st.markdown("#### 💐 메시지 지도")
+    if "lat" in df.columns and "lon" in df.columns and not df.empty:
+        map_center = [df["lat"].mean(), df["lon"].mean()]
+    else:
+        map_center = [37.5665, 126.9780]  # 서울 시청 좌표
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
@@ -60,25 +63,6 @@ with col1:
             icon=folium.Icon(color=color)
         ).add_to(m)
 
-    legend_html = """
-    <div style="
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        width: 90px;
-        background-color: white;
-        border:1px solid grey;
-        z-index:9999;
-        font-size:12px;
-        padding: 4px;
-        box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    ">
-    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
-    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
-    <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="green"/></svg> 휴학생
-    </div>
-    """
-    m.get_root().html.add_child(folium.Element(legend_html))
     st_folium(m, width=750, height=460)
 
 # === 차트 & 워드클라우드 ===
