@@ -23,8 +23,8 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
     .block-container {padding-top: 1rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -40px !important; display: block;}
-    .element-container:has(> iframe) {margin-bottom: -40px !important;}
+    iframe {margin-bottom: -20px !important; display: block;}
+    .element-container:has(> iframe) {margin-bottom: -20px !important;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -74,7 +74,7 @@ with col1:
             icon=icon
         ).add_to(m)
 
-    st_folium(m, width=750, height=470)
+    st_folium(m, use_container_width=True, height=400)
 
     # === 최신 메시지 5개 출력 ===
     st.markdown("#### 📝 최신 메시지 5개")
