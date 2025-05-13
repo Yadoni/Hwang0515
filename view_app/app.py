@@ -48,9 +48,9 @@ col1, col2 = st.columns([2.3, 1.2], gap="small")
 with col1:
     st.markdown("#### 📍 메시지 지도")
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
-        map_center = [36.18423, 125.419977]
+        map_center = [36.973298, 130.458892]
     else:
-        map_center = [36.18423, 125.419977]  # 이래야 폰에서는 한반도가 제대로 보임
+        map_center = [36.973298, 130.458892]  # 이래야 폰에서는 한반도가 제대로 보임
     m = folium.Map(location=map_center, zoom_start=6)
 
     # 사용자 정의 아이콘 URL (작은 사이즈 카네이션 아이콘)
