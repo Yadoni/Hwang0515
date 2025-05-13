@@ -23,7 +23,7 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
     .block-container {padding-top: 1.5rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -100px !important; display: block;}
+    iframe {margin-bottom: -150px !important; display: block;}
     .element-container:has(> iframe) {margin-bottom: -150px !important;}
     </style>
 """, unsafe_allow_html=True)
