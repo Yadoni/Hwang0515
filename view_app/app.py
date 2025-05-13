@@ -50,7 +50,7 @@ with col1:
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
         map_center = [df["lat"].mean(), df["lon"].mean()]
     else:
-        map_center = [37.5665, 126.9780]  # 서울 시청 좌표
+        map_center = [36.6424341, 127.4890319]  # 청주 좌표
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
