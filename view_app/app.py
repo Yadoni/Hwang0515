@@ -23,8 +23,8 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
     .block-container {padding-top: 1rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -100px !important; display: block;}
-    .element-container:has(> iframe) {margin-bottom: -100px !important;}
+    iframe {margin-bottom: -40px !important; display: block;}
+    .element-container:has(> iframe) {margin-bottom: -40px !important;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -81,7 +81,6 @@ with col1:
     latest_df = df.tail(5).iloc[::-1]  # 최신 순 정렬
     for _, row in latest_df.iterrows():
         st.markdown(f"<div style='margin-bottom: 0.2rem'><strong>{row['name']}</strong> ({row['level']}) - {row['message']}</div>", unsafe_allow_html=True)
-
 
 
 # === 차트 & 워드클라우드 ===
