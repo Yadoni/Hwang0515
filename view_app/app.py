@@ -48,7 +48,7 @@ col1, col2 = st.columns([2.3, 1.2], gap="small")
 with col1:
     st.markdown("#### 📍 메시지 지도")
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
-        map_center = [df["lat"].mean(), df["lon"].mean()]
+        map_center = [35.77475029, 128.4313995]
     else:
         map_center = [35.77475029, 128.4313995]  # 대구 좌표. 이래야 폰에서는 한반도가 제대로 보임
     m = folium.Map(location=map_center, zoom_start=6)
