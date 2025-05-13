@@ -46,11 +46,11 @@ col1, col2 = st.columns([2.3, 1.2], gap="small")
 
 # === 지도 시각화 ===
 with col1:
-    st.markdown("#### 💐 메시지 지도")
+    st.markdown("#### 📍 메시지 지도")
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
         map_center = [df["lat"].mean(), df["lon"].mean()]
     else:
-        map_center = [36.6424341, 127.4890319]  # 청주 좌표
+        map_center = [35.77475029, 128.4313995]  # 대 좌표
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
