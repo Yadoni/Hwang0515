@@ -22,9 +22,9 @@ st.set_page_config(page_title="메시지 시각화", layout="wide")
 st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
-    .block-container {padding-top: 2rem; padding-bottom: 1rem;}
-    iframe {margin-bottom: -80px !important; display: block;}
-    .element-container:has(> iframe) {margin-bottom: -80px !important;}
+    .block-container {padding-top: 1.5rem; padding-bottom: 0rem;}
+    iframe {margin-bottom: -100px !important; display: block;}
+    .element-container:has(> iframe) {margin-bottom: -100px !important;}
     </style>
 """, unsafe_allow_html=True)
 
