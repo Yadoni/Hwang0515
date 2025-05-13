@@ -28,7 +28,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("💐 스승의 날 메시지 시각화 대시보드")
+st.title("💐 2025 스승의 날 맞이 황승식 교수님께")
 
 # === 데이터 로딩 ===
 records = sheet.get_all_records()
