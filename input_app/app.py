@@ -1,5 +1,3 @@
-# 메시지 전용 입력 앱 (app_input.py)
-
 import streamlit as st
 from streamlit_javascript import st_javascript
 import gspread
@@ -17,7 +15,14 @@ sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet
 
 # === UI 초기화 ===
 st.set_page_config(page_title="메시지 입력", layout="centered")
-st.title("📨 황승식 교수님께 감사 메시지 남기기")
+st.markdown("""
+    <style>
+    .block-container {padding-top: 2rem; padding-bottom: 0rem;}
+    iframe {margin-bottom: -30px !important;}
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("📨 황승식 교수님께 스승의 날 메시지 드리기")
 
 # === 위치 수집 시도 ===
 st.info("📍 브라우저 위치 권한을 요청합니다. 허용하지 않아도 메시지 저장은 가능합니다.")
@@ -45,7 +50,7 @@ with st.form("message_form"):
     name = st.text_input("이름 (익명 가능)", "")
     level = st.selectbox("신분", ["재학생", "졸업생", "휴학생"])
     message = st.text_area("메시지를 작성해 주세요 (100자 이내)", max_chars=100)
-    submit = st.form_submit_button("메시지 보내기")  # ✅ submit은 여기서 정의됨
+    submit = st.form_submit_button("메시지 보내기")
 
 # === 메시지 저장 ===
 if submit:
@@ -56,9 +61,7 @@ if submit:
         sheet.append_row(row)
         st.success("메시지가 전송되었습니다. 감사합니다 💐")
 
-
 # === 결과 보기 버튼 ===
 st.markdown("---")
-st.markdown("👉 메시지 결과가 궁글하다면 아래 버튼을 누르세요.")
+st.markdown("👉 결과가 궁금하다면 아래 버튼을 누르세요.")
 st.link_button("📊 결과 보기", url="https://hwang0515-view.streamlit.app")
-
