@@ -101,7 +101,7 @@ with col2:
             colormap="Set1"
         ).generate(text)
 
-        fig2, ax2 = plt.subplots(figsize=(4, 2.2))
+        fig2, ax2 = plt.subplots(figsize=(4, 3))
         ax2.imshow(wc, interpolation="bilinear")
         ax2.axis("off")
         st.pyplot(fig2)
