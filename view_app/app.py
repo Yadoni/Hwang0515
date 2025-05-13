@@ -23,11 +23,12 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
     .block-container {padding-top: 2rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -40px !important;}
+    iframe {margin-bottom: -60px !important; display: block;}
+    .element-container:has(> iframe) {margin-bottom: -50px !important;}
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🗺️ 실시간 메시지 시각화 대시보드")
+st.title("🗺️ 스승의 날 메시지 시각화 대시보드")
 
 # === 데이터 로딩 ===
 records = sheet.get_all_records()
@@ -50,14 +51,14 @@ with col1:
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
         map_center = [36.973298, 131.458892]
     else:
-        map_center = [36.973298, 131.458892]  # 이래야 폰에서는 한반도가 제대로 보임
+        map_center = [36.973298, 131.458892]  # 서울 시청 좌표
     m = folium.Map(location=map_center, zoom_start=6)
 
     # 사용자 정의 아이콘 URL (작은 사이즈 카네이션 아이콘)
     icon_urls = {
-        "재학생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/blue_carnation.png",
-        "휴학생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/green_carnation.png",
-        "졸업생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/red_carnation.png"
+        "재학생": "https://raw.githubusercontent.com/Yadoni/Hwang0515/main/icons/red_marker.png",
+        "휴학생": "https://raw.githubusercontent.com/Yadoni/Hwang0515/main/icons/blue_marker.png",
+        "졸업생": "https://raw.githubusercontent.com/Yadoni/Hwang0515/main/icons/pink_marker.png"
     }
 
     for _, row in df.iterrows():
@@ -73,13 +74,13 @@ with col1:
             icon=icon
         ).add_to(m)
 
-    st_folium(m, width=750, height=500)
+    st_folium(m, width=750, height=480)
 
 # === 차트 & 워드클라우드 ===
 with col2:
     st.markdown("#### 📊 참여자 구성")
     level_counts = df["level"].value_counts()
-    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
+    colors = {"재학생": "red", "졸업생": "pink", "휴학생": "blue"}
     bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
 
     fig1, ax1 = plt.subplots(figsize=(4, 1.8))
