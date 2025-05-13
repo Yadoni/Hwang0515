@@ -47,7 +47,7 @@ col1, col2 = st.columns([2.3, 1.2], gap="small")
 # === 지도 시각화 ===
 with col1:
     st.markdown("#### 📍 메시지 지도")
-    map_center = [df["lat"].mean(), df["lon"].mean()]
+    map_center = [37.5665, 126.9780]
     m = folium.Map(location=map_center, zoom_start=6)
 
     for _, row in df.iterrows():
