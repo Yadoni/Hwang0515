@@ -22,9 +22,9 @@ st.set_page_config(page_title="메시지 시각화", layout="wide")
 st.markdown("""
     <style>
     html, body, [class*="css"]  {background-color: white !important;}
-    .block-container {padding-top: 2rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -60px !important; display: block;}
-    .element-container:has(> iframe) {margin-bottom: -50px !important;}
+    .block-container {padding-top: 2rem; padding-bottom: 1rem;}
+    iframe {margin-bottom: -80px !important; display: block;}
+    .element-container:has(> iframe) {margin-bottom: -80px !important;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -67,14 +67,14 @@ with col1:
             icon = folium.CustomIcon(icon_url, icon_size=(26, 26))
         else:
             icon = folium.Icon(color="gray")
-        popup_text = f"<div style='font-size: 13px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 15px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
             icon=icon
         ).add_to(m)
 
-    st_folium(m, width=750, height=480)
+    st_folium(m, width=750, height=470)
 
 # === 차트 & 워드클라우드 ===
 with col2:
