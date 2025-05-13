@@ -17,8 +17,8 @@ sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet
 st.set_page_config(page_title="메시지 입력", layout="centered")
 st.markdown("""
     <style>
-    .block-container {padding-top: 2rem; padding-bottom: 0rem;}
-    iframe {margin-bottom: -30px !important;}
+    .block-container {padding-top: 2rem; padding-bottom: 2rem;}
+    iframe {margin-bottom: 30px !important;}
     </style>
 """, unsafe_allow_html=True)
 
