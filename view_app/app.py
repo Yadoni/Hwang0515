@@ -27,7 +27,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("💐 스승의 날 메시지 시각화 대시보드")
+st.title("🗺️ 실시간 메시지 시각화 대시보드")
 
 # === 데이터 로딩 ===
 records = sheet.get_all_records()
@@ -50,20 +50,30 @@ with col1:
     if "lat" in df.columns and "lon" in df.columns and not df.empty:
         map_center = [df["lat"].mean(), df["lon"].mean()]
     else:
-        map_center = [35.77475029, 128.4313995]  # 대 좌표
+        map_center = [35.77475029, 128.4313995]  # 대구 좌표. 이래야 폰에서는 한반도가 제대로 보임
     m = folium.Map(location=map_center, zoom_start=6)
 
+    # 사용자 정의 아이콘 URL (작은 사이즈 카네이션 아이콘)
+    icon_urls = {
+        "재학생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/blue_carnation.png",
+        "휴학생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/green_carnation.png",
+        "졸업생": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/icons/red_carnation.png"
+    }
+
     for _, row in df.iterrows():
-        color = "blue" if row["level"] == "재학생" else (
-                "green" if row["level"] == "휴학생" else "red")
+        icon_url = icon_urls.get(row["level"], None)
+        if icon_url:
+            icon = folium.CustomIcon(icon_url, icon_size=(26, 26))
+        else:
+            icon = folium.Icon(color="gray")
         popup_text = f"<div style='font-size: 13px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
-            icon=folium.Icon(color=color)
+            icon=icon
         ).add_to(m)
 
-    st_folium(m, width=750, height=460)
+    st_folium(m, width=750, height=500)
 
 # === 차트 & 워드클라우드 ===
 with col2:
