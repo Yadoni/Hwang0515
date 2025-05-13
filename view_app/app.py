@@ -21,16 +21,19 @@ sheet = client.open_by_key("1GzHvQUcgFqlUnyBOT2udLcHjslFjsMazlGPIUIDGG14").sheet
 st.set_page_config(page_title="메시지 시각화", layout="wide")
 st.markdown("""
     <style>
+    html, body, [class*="css"]  {background-color: white !important;}
     .block-container {padding-top: 2rem; padding-bottom: 0rem;}
+    iframe {margin-bottom: -40px !important;}
     </style>
 """, unsafe_allow_html=True)
-st.title("🗺️ 실시간 메시지 시각화 대시보드")
+
+st.title("💐 스승의 날 메시지 시각화 대시보드")
 
 # === 데이터 로딩 ===
 records = sheet.get_all_records()
 df = pd.DataFrame(records)
 
-# === 한글 폰트 설정 (matplotlib + wordcloud)
+# === 한글 폰트 설정 ===
 font_path = os.path.join(os.path.dirname(__file__), "NanumGothic.ttf")
 if os.path.exists(font_path):
     fm.fontManager.addfont(font_path)
@@ -50,26 +53,25 @@ with col1:
     for _, row in df.iterrows():
         color = "blue" if row["level"] == "재학생" else (
                 "green" if row["level"] == "휴학생" else "red")
-        popup_text = f"<div style='font-size: 15px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
+        popup_text = f"<div style='font-size: 13px'>{row['name']} ({row['level']}):<br>{row['message']}</div>"
         folium.Marker(
             location=[row["lat"], row["lon"]],
             popup=folium.Popup(popup_text, max_width=250),
             icon=folium.Icon(color=color)
         ).add_to(m)
 
-    # === 레전드 삽입 (Element 방식)
     legend_html = """
     <div style="
-        position: fixed;
+        position: absolute;
         bottom: 10px;
         left: 10px;
-        width: 80px;
+        width: 90px;
         background-color: white;
         border:1px solid grey;
         z-index:9999;
-        font-size:13px;
+        font-size:12px;
         padding: 4px;
-        box-shadow: 1px 1px 2px rgba(0,0,0,0);
+        box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     ">
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="blue"/></svg> 재학생<br>
     <svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red"/></svg> 졸업생<br>
@@ -77,10 +79,22 @@ with col1:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=750, height=500)
+    st_folium(m, width=750, height=460)
 
 # === 차트 & 워드클라우드 ===
 with col2:
+    st.markdown("#### 📊 참여자 구성")
+    level_counts = df["level"].value_counts()
+    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
+    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
+
+    fig1, ax1 = plt.subplots(figsize=(4, 1.8))
+    ax1.bar(level_counts.index, level_counts.values, color=bar_colors)
+    ax1.set_ylabel("메시지 수")
+    ax1.set_yticks(range(1, max(level_counts.values)+1))
+    ax1.set_title("참여자 구성")
+    st.pyplot(fig1)
+
     st.markdown("#### ☁️ 메시지 워드클라우드")
     if not df["message"].empty:
         text = " ".join(df["message"].astype(str))
@@ -92,21 +106,9 @@ with col2:
             colormap="Set1"
         ).generate(text)
 
-        fig, ax = plt.subplots(figsize=(4, 2.2))
-        ax.imshow(wc, interpolation="bilinear")
-        ax.axis("off")
-        st.pyplot(fig)
+        fig2, ax2 = plt.subplots(figsize=(4, 2.2))
+        ax2.imshow(wc, interpolation="bilinear")
+        ax2.axis("off")
+        st.pyplot(fig2)
     else:
         st.info("메시지가 아직 없습니다.")
-
-    st.markdown("#### 📊 참여자 구성")
-    level_counts = df["level"].value_counts()
-    colors = {"재학생": "blue", "휴학생": "green", "졸업생": "red"}
-    bar_colors = [colors.get(lv, "gray") for lv in level_counts.index]
-
-    fig, ax = plt.subplots(figsize=(4, 1.8))
-    ax.bar(level_counts.index, level_counts.values, color=bar_colors)
-    ax.set_ylabel("메시지 수")
-    ax.set_yticks(range(1, max(level_counts.values)+1))
-    ax.set_title("참여자 구성")
-    st.pyplot(fig)
